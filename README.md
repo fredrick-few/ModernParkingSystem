@@ -112,7 +112,10 @@ ParkingSystem/
 ├── payment.py          # Payment Processor & Barrier Control Logic
 ├── parking_system.db   # SQLite Database File
 └── templates/          # Responsive Jinja2 HTML Templates
-
+    ├── index.html      # Entrance View & Live Slot Grid Monitor
+    ├── checkout.html   # Exit Gateway & Payment Settlement View
+    └── admin.html      # Admin Dashboard & Live Rate Configuration
+```
 ### Step-by-Step Guide to Run Locally
 
 1. **Clone the Repository**:
@@ -136,6 +139,4 @@ ParkingSystem/
    ```Plaintext
    [http://127.0.0.1:5000](http://127.0.0.1:5000)
    Alternatively, in your VS Code terminal, hold Ctrl (or Cmd on macOS) and click the http://127.0.0.1:5000 link that appears when Flask     starts to open it directly in your browser. 
-    ├── index.html      # Entrance View & Live Slot Grid Monitor
-    ├── checkout.html   # Exit Gateway & Payment Settlement View
-    └── admin.html      # Admin Dashboard & Live Rate Configuration
+   
