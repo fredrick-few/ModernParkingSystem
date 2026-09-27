@@ -137,6 +137,7 @@ ParkingSystem/
 4. **Access the Web Interface**:
    Open any web browser and navigate to:
    ```Plaintext
-   [http://127.0.0.1:5000](http://127.0.0.1:5000)
-   Alternatively, in your VS Code terminal, hold Ctrl (or Cmd on macOS) and click the http://127.0.0.1:5000 link that appears when Flask     starts to open it directly in your browser. 
+    [http://127.0.0.1:5000](http://127.0.0.1:5000)
+  
+  Alternatively, in your VS Code terminal, hold Ctrl (or Cmd on macOS) and click the http://127.0.0.1:5000 link that appears when Flask     starts to open it directly in your browser. 
    
