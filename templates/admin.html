@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background: #f4f6f9; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        nav a { margin-right: 15px; text-decoration: none; font-weight: bold; color: #007bff; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">Entrance (Check-In)</a> |
+            <a href="/checkout">Exit (Payment)</a> |
+            <a href="/admin">Admin Dashboard</a>
+        </nav>
+        <hr>
+        <h2>Admin Management Dashboard</h2>
+
+        <!-- Rate Configuration Panel -->
+        <div style="background: #eef2f7; padding: 15px; border-radius: 6px; margin-bottom: 25px;">
+            <h3>⚙️ Rate Tariff Management (Live Configuration)</h3>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div style="padding: 8px; background: #d4edda; color: #155724; border-radius: 4px; margin-bottom: 10px;">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            <form action="/update_rates" method="POST" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                <div>
+                    <label>0 - 30 Mins (Kshs):</label><br>
+                    <input type="number" name="tier_30m" value="{{ tiers[0][1] }}" required style="width: 90%; padding: 5px;">
+                </div>
+                <div>
+                    <label>30 Mins - 2 Hours (Kshs):</label><br>
+                    <input type="number" name="tier_2h" value="{{ tiers[1][1] }}" required style="width: 90%; padding: 5px;">
+                </div>
+                <div>
+                    <label>2 Hours - 4 Hours (Kshs):</label><br>
+                    <input type="number" name="tier_4h" value="{{ tiers[2][1] }}" required style="width: 90%; padding: 5px;">
+                </div>
+                <div>
+                    <label>4 Hours - 6 Hours (Kshs):</label><br>
+                    <input type="number" name="tier_6h" value="{{ tiers[3][1] }}" required style="width: 90%; padding: 5px;">
+                </div>
+                <div>
+                    <label>6+ Hours Max Cap (Kshs):</label><br>
+                    <input type="number" name="max_fee" value="{{ max_fee }}" required style="width: 90%; padding: 5px;">
+                </div>
+                <div style="align-self: end;">
+                    <button type="submit" style="padding: 8px 15px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Save New Rates</button>
+                </div>
+            </form>
+        </div>
+
+        <h3>Active Vehicles Currently Parked</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ticket ID</th>
+                    <th>Plate Number</th>
+                    <th>Slot ID</th>
+                    <th>Entry Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in active %}
+                <tr>
+                    <td>{{ v[0] }}</td>
+                    <td>{{ v[1] }}</td>
+                    <td>{{ v[2] }}</td>
+                    <td>{{ v[3] }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4">No vehicles currently parked.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Completed Transactions & Revenue Audit Log</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Txn ID</th>
+                    <th>Plate</th>
+                    <th>Slot</th>
+                    <th>Duration (mins)</th>
+                    <th>Fee Charged</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t[0] }}</td>
+                    <td>{{ t[1] }}</td>
+                    <td>{{ t[2] }}</td>
+                    <td>{{ t[5] }}</td>
+                    <td>Kshs {{ t[6] }}</td>
+                    <td>{{ t[7] }}</td>
+                    <td>{{ t[8] }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7">No recorded transactions yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

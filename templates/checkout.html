@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exit Payment Gate</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background: #f4f6f9; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        nav a { margin-right: 15px; text-decoration: none; font-weight: bold; color: #007bff; }
+        .alert { padding: 10px; margin-bottom: 15px; border-radius: 4px; background: #e2e3e5; }
+        .form-group { margin-bottom: 15px; }
+        input[type="text"], input[type="number"], input[type="password"], select { padding: 8px; width: 100%; box-sizing: border-box; margin-top: 5px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">Entrance (Check-In)</a> |
+            <a href="/checkout">Exit (Payment)</a> |
+            <a href="/admin">Admin Dashboard</a>
+        </nav>
+        <hr>
+        <h2>Exit Gate & Fee Settlement</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form action="/checkout" method="POST">
+            <div class="form-group">
+                <label><strong>Vehicle License Plate:</strong></label>
+                <input type="text" name="plate_number" placeholder="e.g. KDA 123X" required>
+            </div>
+            
+            <div class="form-group">
+                <label><strong>Select Payment Method:</strong></label>
+                <select name="payment_method" id="payment_method" onchange="togglePaymentFields()" required>
+                    <option value="MPESA">M-Pesa</option>
+                    <option value="CASH">Cash</option>
+                    <option value="CARD">Debit / Credit Card</option>
+                </select>
+            </div>
+
+            <!-- Dynamic Payment Input Fields -->
+            <div class="form-group" id="mpesa_field">
+                <label><strong>M-Pesa Phone Number:</strong></label>
+                <input type="text" name="mpesa_phone" placeholder="e.g. 0712345678">
+            </div>
+
+            <div id="card_field" style="display: none;">
+                <div class="form-group">
+                    <label><strong>16-Digit Card Number:</strong></label>
+                    <input type="text" name="card_number" placeholder="4000 1234 5678 9010" maxlength="16">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label><strong>Expiry Date:</strong></label>
+                        <input type="text" name="card_expiry" placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label><strong>CVV:</strong></label>
+                        <input type="password" name="card_cvv" placeholder="123" maxlength="3">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="cash_field" style="display: none;">
+                <label><strong>Amount Cash Given (Kshs):</strong></label>
+                <input type="number" name="cash_given" placeholder="e.g. 200">
+            </div>
+
+            <button type="submit">Process Payment & Open Barrier</button>
+        </form>
+    </div>
+
+    <script>
+        function togglePaymentFields() {
+            const method = document.getElementById('payment_method').value;
+            document.getElementById('mpesa_field').style.display = (method === 'MPESA') ? 'block' : 'none';
+            document.getElementById('card_field').style.display = (method === 'CARD') ? 'block' : 'none';
+            document.getElementById('cash_field').style.display = (method === 'CASH') ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>
